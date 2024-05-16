@@ -1,4 +1,4 @@
-Search Engine using Trie Data Structure
+Search Engine using Trie Data Structure in Python
 
 This was done as a part of assignment in the Information Retrieval (CS4201) Course at IISER-Kolkata. The code implements a search engine using the Trie data structure.
 
