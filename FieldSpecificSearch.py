@@ -33,7 +33,7 @@ class Node:
     def __init__(self, postings): #initialize a node
         self.postings = []
         self.children = [None for a in range(27)]
-    def insert(self,word,docid): #insert a node in the trie by creating suitable number of nodes
+    def insert(self,word,docid): #insert a word in the trie by creating suitable number of nodes and also update the postings list
         a = list(word)
         if a!=[]:
             if self.children[ord(a[0])-97] == None:
@@ -49,7 +49,7 @@ class Node:
                 self.postings.append(docid)
             elif docid != self.postings[len(self.postings)-1]:
                 self.postings.append(docid)
-    def search(self,word): #search all the results by travelling down the trie
+    def search(self,word): #search the word by travelling down the trie and retrieve the postings list
         a = list(word)
         if a == []:
             return self.postings
