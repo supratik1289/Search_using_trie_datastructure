@@ -61,16 +61,16 @@ print("Total Pre-processing time: ",b-a)
 #trie structure definition
 
 class Node:
-    def __init__(self, postings): #node initialization function 
+    def __init__(self, postings): #initialize a node
         #each node has a postings list for a word ending this node and a children list with link to next 26 letters
         self.postings = []
         self.children = [None for a in range(27)]
-    def insert(self,word,docid): #insert function inserts a word and the corresponding docid recursively
-        a = list(word) #takes the word and split into letters
-        if a!=[]: #if not empty then go to the node corresponding to the first letter in the array or create one if it doesn't exist
+    def insert(self,word,docid): #insert a word in the trie by creating suitable number of nodes and also update the postings list
+        a = list(word) 
+        if a!=[]: 
             if self.children[ord(a[0])-97] == None:
                 self.children[ord(a[0])-97] = Node([])
-                s = a.pop(0) #after going to the node remove the letter from list and call the function again with the smaller word
+                s = a.pop(0) 
                 self.children[ord(s)-97].insert("".join(a),docid) 
             else:
                 #print(ord(a[0])-97)
@@ -81,7 +81,7 @@ class Node:
                 self.postings.append(docid)
             elif docid != self.postings[len(self.postings)-1]:
                 self.postings.append(docid)
-    def search(self,word): #search function searches a word and retrieves the postings  
+    def search(self,word): #search the word by travelling down the trie and retrieve the postings list
         """
         if self.children == ['' for a in range(27)]:
             return ['Result Not Found']
