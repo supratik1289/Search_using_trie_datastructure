@@ -16,6 +16,7 @@ link = data[2]
 
 NDOC = len(title)
 
+#functions to process the input given by the user into text that can be used by the engine
 symbols = ['`','~','!','@','#','$','%','^','&','*','(',')','_','-','+','=','{','[','}','}','|',':',';','"',"'",'<',',','>','.','?','/',']','\n','\0','1','2','3','4','5','6','7','8','9','0']
 
 def preprocess(x):
@@ -29,10 +30,10 @@ def preprocess(x):
 #defining trie structure so that we can unpickle the information and use it
 
 class Node:
-    def __init__(self, postings):
+    def __init__(self, postings): #initialize a node
         self.postings = []
         self.children = [None for a in range(27)]
-    def insert(self,word,docid):
+    def insert(self,word,docid): #insert a node in the trie by creating suitable number of nodes
         a = list(word)
         if a!=[]:
             if self.children[ord(a[0])-97] == None:
@@ -48,7 +49,7 @@ class Node:
                 self.postings.append(docid)
             elif docid != self.postings[len(self.postings)-1]:
                 self.postings.append(docid)
-    def search(self,word):
+    def search(self,word): #search all the results by travelling down the trie
         a = list(word)
         if a == []:
             return self.postings
@@ -60,6 +61,7 @@ class Node:
                 return ['Result Not Found']
 
 #loading the pickeled trie
+#different tries for different fields like title or plot of the movie or any thing
 
 with open("moviedata", "rb") as f:
     loaded_tree = pickle.load(f)
@@ -87,6 +89,8 @@ print("Options: ")
 print("Enter 1 for Searching.")
 print("Enter 2 to Quit.")
 
+#loop to continuously take inputs
+
 while(1):
     try:
         service = int(input("Enter Option: "))
@@ -97,6 +101,7 @@ while(1):
             field = int(input("Input in which fields to search:\n1 for Title\n2 for Plot\n3 for both\nOption: "))
             s = time.time()
             a=[]
+            #search the suitable tree based on the field requested by the user
             if field==1:
                 a = set(head1.search(preprocess(query[0])))
                 for x in query:
