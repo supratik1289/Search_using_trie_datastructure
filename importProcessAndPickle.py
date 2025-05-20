@@ -8,7 +8,7 @@ from unidecode import unidecode
 #opening and reading all the data from the corpus
 
 a = time.time()
-df = p.read_excel("wiki_movie_plots_deduped.xlsx") #using excel format for better reading without errors
+df = p.read_excel("wiki_movie_plots_deduped.xlsx")
 df = df.drop(columns=["Release Year","Origin/Ethnicity","Director","Cast","Genre"]) #drops unimportant fields
 
 
@@ -30,12 +30,10 @@ with open("dataframe","wb") as f:
 b = time.time()
 print("Time required to pickle the dataframe: ",b-a)
 
-#preprocessing the data (removing special characters and numbers)
+#preprocessing the data 
 
 NDOC = len(title)
 print("Number of documents to be processed:",NDOC)
-
-#preprocess function removes every special symbol from the list
 
 symbols = ['`','~','!','@','#','$','%','^','&','*','(',')','_','-','+','=','{','[','}','}','|',':',';','"',"'",'<',',','>','.','?','/',']','\n','\0','1','2','3','4','5','6','7','8','9','0']
 
@@ -49,7 +47,8 @@ def preprocess(x):
 
 a = time.time()
 
-#preprocessing title and plot for search engine building
+#preprocessing title and plot 
+
 for i in range(len(title)):
     title[i] = preprocess(str(title[i]))
 
@@ -58,8 +57,6 @@ for i in range(len(plot)):
 
 b = time.time()
 print("Total Pre-processing time: ",b-a)
-
-#trie structure part
 
 #trie structure definition
 
@@ -79,7 +76,7 @@ class Node:
                 #print(ord(a[0])-97)
                 s = a.pop(0)
                 self.children[ord(s)-97].insert("".join(a),docid)
-        else: #if empty it means end of word is reached then simply append the postings list if the docid is not present previously
+        else: 
             if self.postings == []:
                 self.postings.append(docid)
             elif docid != self.postings[len(self.postings)-1]:
@@ -90,22 +87,22 @@ class Node:
             return ['Result Not Found']
         else:
         """
-        a = list(word) #breaks the word into letters and finds the postings recursively
-        if a == []: #if a is empty it means we have reached the destination node and we return the postings
+        a = list(word) 
+        if a == []: 
             return self.postings
         else:
-            if self.children[ord(a[0])-97] != None: #otherwise we go to the next node if it exists and call the function on the next node
+            if self.children[ord(a[0])-97] != None: 
                 s = a.pop(0)
                 return self.children[ord(s)-97].search("".join(a))
             else:
-                return ['Result Not Found'] #if the next node doesn't existm it means the word doesn't exist in the trie and we return
+                return ['Result Not Found'] 
 
 #trie initialization
 
 head = Node([])
 head1 = Node([])
 head2 = Node([])
-#forming the tries for different search engines
+#forming the tries for different fields
 
 s = time.time()
 
